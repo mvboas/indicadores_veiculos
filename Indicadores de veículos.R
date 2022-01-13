@@ -1,13 +1,13 @@
 #################################################################################################################
 #GECON
-#¡REA:CR…DITO
-#PLANILHA INDICADORES DE CR…DITO PARA VEÕCULOS
+#√ÅREA:CR√âDITO
+#PLANILHA INDICADORES DE CR√âDITO PARA VE√çCULOS
 #MARCELO VILAS BOAS DE CASTRO
-#DATA:26-04-2019
+#DATA:26-11-2019
 #################################################################################################################
 
 #PACOTES REQUERIDOS:
-#INSTALAR QUANDO NECESS¡RIO
+#INSTALAR QUANDO NECESS√ÅRIO
 #EXEMPLO:install.packages("pryr")
 #library(xlsx)
 library(RCurl)
@@ -18,23 +18,23 @@ library(rio)
 getwd()
 setwd("C:\\Users\\User\\Documents")
 
-#Criando funÁ„o para coleta de sÈries
+#Criando fun√ß√£o para coleta de s√©ries
 coleta_dados_sgs = function(series,datainicial="01/03/2011", datafinal = format(Sys.time(), "%d/%m/%Y")){
-  #Argumentos: vetor de sÈries, datainicial que pode ser manualmente alterada e datafinal que automaticamente usa a data de hoje
-  #Cria estrutura de repetiÁ„o para percorrer vetor com cÛdigos de sÈries e depois juntar todas em um ˙nico dataframe
+  #Argumentos: vetor de s√©ries, datainicial que pode ser manualmente alterada e datafinal que automaticamente usa a data de hoje
+  #Cria estrutura de repeti√ß√£o para percorrer vetor com c√≥digos de s√©ries e depois juntar todas em um √∫nico dataframe
   for (i in 1:length(series)){
     dados = read.csv(url(paste("http://api.bcb.gov.br/dados/serie/bcdata.sgs.",series[i],"/dados?formato=csv&dataInicial=",datainicial,"&dataFinal=",datafinal,sep="")),sep=";")
-    dados[,-1] = as.numeric(gsub(",",".",dados[,-1])) #As colunas do dataframe em objetos numÈricos exceto a da data
-    nome_coluna = series[i] #Nomeia cada coluna do dataframe com o cÛdigo da sÈrie
+    dados[,-1] = as.numeric(gsub(",",".",dados[,-1])) #As colunas do dataframe em objetos num√©ricos exceto a da data
+    nome_coluna = series[i] #Nomeia cada coluna do dataframe com o c√≥digo da s√©rie
     colnames(dados) = c('data', nome_coluna)
-    nome_arquivo = paste("dados", i, sep = "") #Nomeia os v·rios arquivos intermedi·rios que s„o criados com cada sÈrie
+    nome_arquivo = paste("dados", i, sep = "") #Nomeia os v√°rios arquivos intermedi√°rios que s√£o criados com cada s√©rie
     assign(nome_arquivo, dados)
     
     if(i==1)
-      base = dados1 #Primeira repetiÁ„o cria o dataframe
+      base = dados1 #Primeira repeti√ß√£o cria o dataframe
     else
-      base = merge(base, dados, by = "data", all = T) #Demais repetiÁıes agregam colunas ao dataframe criado
-    print(paste(i, length(series), sep = '/')) #Printa o progresso da repetiÁ„o
+      base = merge(base, dados, by = "data", all = T) #Demais repeti√ß√µes agregam colunas ao dataframe criado
+    print(paste(i, length(series), sep = '/')) #Printa o progresso da repeti√ß√£o
   }
   
   base$data = as.Date(base$data, "%d/%m/%Y") #Transforma coluna de data no formato de data
@@ -42,16 +42,16 @@ coleta_dados_sgs = function(series,datainicial="01/03/2011", datafinal = format(
   return(base)
 }
 
-#Coletando sÈries
+#Coletando s√©ries
 series=c(20553, 20556, 20581, 20584, 20645, 20648, 20673, 20676, 20728, 20731, 20749, 20752, 20864, 20867, 20886, 20889, 20938, 20941, 20963, 20966, 21017, 21020, 21042, 21045, 21096, 21099, 21121, 21124, 25447, 25450, 25471, 25474, 27658, 27660, 27680, 27682, 27735)
 
 base <- coleta_dados_sgs(series)
 
-names(base)=c("Data", "20553 - Saldo da carteira de crÈdito com recursos livres - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - R$ (milhıes", "20556 - Saldo da carteira de crÈdito com recursos livres - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - R$ (milhıes)", "20581 - Saldo da carteira de crÈdito com recursos livres - Pessoas fÌsicas - AquisiÁ„o de veÌculos - R$ (milhıes)", "20584 - Saldo da carteira de crÈdito com recursos livres - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - R$ (milhıes)", "20645 - Concessıes de crÈdito com recursos livres - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - R$ (milhıes)", "20648 - Concessıes de crÈdito com recursos livres - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - R$ (milhıes)", "20673 - Concessıes de crÈdito com recursos livres - Pessoas fÌsicas - AquisiÁ„o de veÌculos - R$ (milhıes)",  "20676 - Concessıes de crÈdito com recursos livres - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - R$ (milhıes)" , "20728 - Taxa mÈdia de juros das operaÁıes de crÈdito com recursos livres - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - % a.a.",
-              "20731 - Taxa mÈdia de juros das operaÁıes de crÈdito com recursos livres - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - % a.a.", "20749 - Taxa mÈdia de juros das operaÁıes de crÈdito com recursos livres - Pessoas fÌsicas - AquisiÁ„o de veÌculos - % a.a.", "20752 - Taxa mÈdia de juros das operaÁıes de crÈdito com recursos livres - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - % a.a.", "20864 - Prazo mÈdio das concessıes de crÈdito com recursos livres - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - Meses", "20867 - Prazo mÈdio das concessıes de crÈdito com recursos livres - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - Meses", "20886 - Prazo mÈdio das concessıes de crÈdito com recursos livres - Pessoas fÌsicas - AquisiÁ„o de veÌculos - Meses", "20889 - Prazo mÈdio das concessıes de crÈdito com recursos livres - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - Meses", "20938 - Prazo mÈdio da carteira de crÈdito com recursos livres - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - Meses", "20941 - Prazo mÈdio da carteira de crÈdito com recursos livres - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - Meses", "20963 - Prazo mÈdio da carteira de crÈdito com recursos livres - Pessoas fÌsicas - AquisiÁ„o de veÌculos - Meses",
-              "20966 - Prazo mÈdio da carteira de crÈdito com recursos livres - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - Meses", "21017 - Percentual da carteira de crÈdito com recursos livres com atraso entre 15 e 90 dias - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - %", "21020 - Percentual da carteira de crÈdito com recursos livres com atraso entre 15 e 90 dias - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - %", "21042 - Percentual da carteira de crÈdito com recursos livres com atraso entre 15 e 90 dias - Pessoas fÌsicas - AquisiÁ„o de veÌculos - %", "21045 - Percentual da carteira de crÈdito com recursos livres com atraso entre 15 e 90 dias - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - %", "21096 - InadimplÍncia da carteira de crÈdito com recursos livres - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - %", "21099 - InadimplÍncia da carteira de crÈdito com recursos livres - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - %", "21121 - InadimplÍncia da carteira de crÈdito com recursos livres - Pessoas fÌsicas - AquisiÁ„o de veÌculos - %", "21124 - InadimplÍncia da carteira de crÈdito com recursos livres - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - %",
-              "25447 - Taxa mÈdia mensal de juros das operaÁıes de crÈdito com recursos livres - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - % a.m.", "25450 - Taxa mÈdia mensal de juros das operaÁıes de crÈdito com recursos livres - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - % a.m.	", "25471 - Taxa mÈdia mensal de juros das operaÁıes de crÈdito com recursos livres - Pessoas fÌsicas - AquisiÁ„o de veÌculos - % a.m.", "25474 - Taxa mÈdia mensal de juros das operaÁıes de crÈdito com recursos livres - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - % a.m.", "27658 - Indicador de Custo do CrÈdito - ICC - Recursos Livres - Pessoas jurÌdicas - AquisiÁ„o de veÌculos - % a.a.", "27660 - Indicador de Custo do CrÈdito - ICC - Recursos Livres - Pessoas jurÌdicas - Arrendamento mercantil de veÌculos - % a.a.", "27680 - Indicador de Custo do CrÈdito - ICC - Recursos Livres - Pessoas fÌsicas - AquisiÁ„o de veÌculos - % a.a.", "27682 - Indicador de Custo do CrÈdito - ICC - Recursos Livres - Pessoas fÌsicas - Arrendamento mercantil de veÌculos - % a.a.", "27735 - Saldo das operaÁıes de crÈdito por atividade econÙmica - Geral - veÌculos automotores - R$ (milhıes)")
+names(base)=c("Data", "20553 - Saldo da carteira de cr√©dito com recursos livres - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - R$ (milh√µes", "20556 - Saldo da carteira de cr√©dito com recursos livres - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - R$ (milh√µes)", "20581 - Saldo da carteira de cr√©dito com recursos livres - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - R$ (milh√µes)", "20584 - Saldo da carteira de cr√©dito com recursos livres - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - R$ (milh√µes)", "20645 - Concess√µes de cr√©dito com recursos livres - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - R$ (milh√µes)", "20648 - Concess√µes de cr√©dito com recursos livres - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - R$ (milh√µes)", "20673 - Concess√µes de cr√©dito com recursos livres - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - R$ (milh√µes)",  "20676 - Concess√µes de cr√©dito com recursos livres - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - R$ (milh√µes)" , "20728 - Taxa m√©dia de juros das opera√ß√µes de cr√©dito com recursos livres - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - % a.a.",
+              "20731 - Taxa m√©dia de juros das opera√ß√µes de cr√©dito com recursos livres - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - % a.a.", "20749 - Taxa m√©dia de juros das opera√ß√µes de cr√©dito com recursos livres - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - % a.a.", "20752 - Taxa m√©dia de juros das opera√ß√µes de cr√©dito com recursos livres - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - % a.a.", "20864 - Prazo m√©dio das concess√µes de cr√©dito com recursos livres - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - Meses", "20867 - Prazo m√©dio das concess√µes de cr√©dito com recursos livres - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - Meses", "20886 - Prazo m√©dio das concess√µes de cr√©dito com recursos livres - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - Meses", "20889 - Prazo m√©dio das concess√µes de cr√©dito com recursos livres - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - Meses", "20938 - Prazo m√©dio da carteira de cr√©dito com recursos livres - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - Meses", "20941 - Prazo m√©dio da carteira de cr√©dito com recursos livres - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - Meses", "20963 - Prazo m√©dio da carteira de cr√©dito com recursos livres - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - Meses",
+              "20966 - Prazo m√©dio da carteira de cr√©dito com recursos livres - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - Meses", "21017 - Percentual da carteira de cr√©dito com recursos livres com atraso entre 15 e 90 dias - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - %", "21020 - Percentual da carteira de cr√©dito com recursos livres com atraso entre 15 e 90 dias - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - %", "21042 - Percentual da carteira de cr√©dito com recursos livres com atraso entre 15 e 90 dias - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - %", "21045 - Percentual da carteira de cr√©dito com recursos livres com atraso entre 15 e 90 dias - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - %", "21096 - Inadimpl√™ncia da carteira de cr√©dito com recursos livres - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - %", "21099 - Inadimpl√™ncia da carteira de cr√©dito com recursos livres - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - %", "21121 - Inadimpl√™ncia da carteira de cr√©dito com recursos livres - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - %", "21124 - Inadimpl√™ncia da carteira de cr√©dito com recursos livres - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - %",
+              "25447 - Taxa m√©dia mensal de juros das opera√ß√µes de cr√©dito com recursos livres - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - % a.m.", "25450 - Taxa m√©dia mensal de juros das opera√ß√µes de cr√©dito com recursos livres - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - % a.m.	", "25471 - Taxa m√©dia mensal de juros das opera√ß√µes de cr√©dito com recursos livres - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - % a.m.", "25474 - Taxa m√©dia mensal de juros das opera√ß√µes de cr√©dito com recursos livres - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - % a.m.", "27658 - Indicador de Custo do Cr√©dito - ICC - Recursos Livres - Pessoas jur√≠dicas - Aquisi√ß√£o de ve√≠culos - % a.a.", "27660 - Indicador de Custo do Cr√©dito - ICC - Recursos Livres - Pessoas jur√≠dicas - Arrendamento mercantil de ve√≠culos - % a.a.", "27680 - Indicador de Custo do Cr√©dito - ICC - Recursos Livres - Pessoas f√≠sicas - Aquisi√ß√£o de ve√≠culos - % a.a.", "27682 - Indicador de Custo do Cr√©dito - ICC - Recursos Livres - Pessoas f√≠sicas - Arrendamento mercantil de ve√≠culos - % a.a.", "27735 - Saldo das opera√ß√µes de cr√©dito por atividade econ√¥mica - Geral - ve√≠culos automotores - R$ (milh√µes)")
 
-#Exportando sÈries
+#Exportando s√©ries
 write.csv2(base,"Indicadores de credito - veiculos(fonte).csv", row.names = F)
 export(base, "Indicadores de credito - veiculos(fonte).xlsx")
